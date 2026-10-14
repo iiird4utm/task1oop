@@ -28,6 +28,39 @@ public class Main {
                 doctor.getFullName()
         );
 
+        Medication medication = new Medication(
+                "Paracetamol",
+                date,
+                date.plusDays(3),
+                LocalTime.of(10, 0),
+                Duration.ofHours(8),
+                Duration.ofMinutes(10)
+        );
 
+        patient.addMedication(medication);
+
+        System.out.println("Пациент: "
+                + patient.getFullName());
+
+        System.out.println("Возраст: "
+                + patient.getAge());
+
+        System.out.println("Полис: "
+                + patient.getPolis());
+
+        System.out.println("Запись: "
+                + doctor.recordTime(
+                patient, date, LocalTime.of(10, 15)));
+
+        System.out.println("Запись вне рабочего дня: "
+                + doctor.recordTime(
+                patient, date, LocalTime.of(18, 0)));
+
+        System.out.println("Записи пациента:");
+
+        for (Appointment appointment
+                : patient.historyOfAppointments()) {
+            System.out.println(appointment);
+        }
     }
 }

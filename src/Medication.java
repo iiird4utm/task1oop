@@ -51,5 +51,40 @@ public class Medication {
         return periodicity;
     }
 
+    public boolean conflictsWith(Appointment appointment) {
 
+        if (appointment == null) {
+            throw new IllegalArgumentException(
+                    "Запись на приём не может быть null");
+        }
+
+        LocalDateTime appointmentStart =
+                appointment.getDate().atTime(
+                        appointment.getStart());
+
+        LocalDateTime appointmentEnd =
+                appointment.getDate().atTime(
+                        appointment.getEnd());
+
+        LocalDateTime doseStart =
+                startDate.atTime(firstDoseTime);
+
+        LocalDateTime lastDateTime =
+                endDate.plusDays(1).atStartOfDay();
+
+        while (doseStart.isBefore(lastDateTime)) {
+
+            LocalDateTime doseEnd =
+                    doseStart.plus(doseDuration);
+
+            if (doseStart.isBefore(appointmentEnd)
+                    && appointmentStart.isBefore(doseEnd)) {
+                return true;
+            }
+
+            doseStart = doseStart.plus(periodicity);
+        }
+
+        return false;
+    }
 }

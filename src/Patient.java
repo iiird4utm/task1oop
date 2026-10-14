@@ -72,4 +72,72 @@ public class Patient implements Person {
     public String getDoctorName() {
         return doctorName;
     }
+
+    public void addMedication(Medication medication) {
+
+        if (medication == null) {
+            throw new IllegalArgumentException(
+                    "Лекарство не задано");
+        }
+
+        for (Appointment appointment : appointments) {
+            if (medication.conflictsWith(appointment)) {
+                throw new IllegalArgumentException(
+                        "Приём лекарства пересекается "
+                                + "с записью к врачу");
+            }
+        }
+
+        medications.add(medication);
+    }
+
+    public List<Medication> getMedications() {
+        return List.copyOf(medications);
+    }
+
+    public void addAppointment(Appointment appointment) {
+
+        if (appointment == null) {
+            throw new IllegalArgumentException(
+                    "Запись на приём не задана");
+        }
+
+        appointments.add(appointment);
+    }
+
+    public boolean isAvailable(LocalDate date,
+                               LocalTime start,
+                               LocalTime end) {
+
+        if (date == null || start == null || end == null
+                || !start.isBefore(end)) {
+            return false;
+        }
+
+        for (Appointment appointment : appointments) {
+            if (appointment.getDate().equals(date)
+                    && start.isBefore(appointment.getEnd())
+                    && appointment.getStart().isBefore(end)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean hasMedicationConflict(
+            Appointment appointment) {
+
+        for (Medication medication : medications) {
+            if (medication.conflictsWith(appointment)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<Appointment> historyOfAppointments() {
+        return List.copyOf(appointments);
+    }
 }

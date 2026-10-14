@@ -16,6 +16,8 @@ public class Doctor implements Person {
     private final LocalTime workEnd;
     private final Duration appointmentDuration;
 
+    private final List<Appointment> appointments =
+            new ArrayList<>();
 
     public Doctor(String name, String surname, int age,
                   String specialization, int numberOfOffice,
@@ -89,6 +91,9 @@ public class Doctor implements Person {
         return appointmentDuration;
     }
 
+    public List<Appointment> getAppointments() {
+        return List.copyOf(appointments);
+    }
 
     public boolean isWorkingTime(LocalTime start,
                                  LocalTime end) {
@@ -100,6 +105,24 @@ public class Doctor implements Person {
                 && !end.isAfter(workEnd);
     }
 
+    public boolean checkOfFreedom(LocalDate date,
+                                  LocalTime start,
+                                  LocalTime end) {
+
+        if (date == null || !isWorkingTime(start, end)) {
+            return false;
+        }
+
+        for (Appointment appointment : appointments) {
+            if (appointment.getDate().equals(date)
+                    && start.isBefore(appointment.getEnd())
+                    && appointment.getStart().isBefore(end)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public boolean recordTime(Patient patient,
                               LocalDate date,
@@ -121,5 +144,29 @@ public class Doctor implements Person {
             return false;
         }
 
+        if (!checkOfFreedom(date, start, end)) {
+            return false;
+        }
+
+        if (!patient.isAvailable(date, start, end)) {
+            return false;
+        }
+
+        Appointment appointment = new Appointment(
+                patient,
+                this,
+                date,
+                start,
+                end
+        );
+
+        if (patient.hasMedicationConflict(appointment)) {
+            return false;
+        }
+
+        appointments.add(appointment);
+        patient.addAppointment(appointment);
+
+        return true;
     }
 }
