@@ -26,7 +26,7 @@ public class Doctor implements Person {
 
         if (name == null || name.isBlank()
                 || surname == null || surname.isBlank()
-                || age < 18 || age > 130
+                || age < 18
                 || specialization == null
                 || specialization.isBlank()
                 || numberOfOffice <= 0
@@ -37,7 +37,7 @@ public class Doctor implements Person {
                 || appointmentDuration.isZero()
                 || appointmentDuration.isNegative()) {
 
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Некорректные данные врача");
         }
 

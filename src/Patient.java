@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Patient implements Person {
                 || diagnosis == null || diagnosis.isBlank()
                 || doctorName == null || doctorName.isBlank()) {
 
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Некорректные данные пациента");
         }
 
@@ -76,13 +77,13 @@ public class Patient implements Person {
     public void addMedication(Medication medication) {
 
         if (medication == null) {
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Лекарство не задано");
         }
 
         for (Appointment appointment : appointments) {
             if (medication.conflictsWith(appointment)) {
-                throw new IllegalArgumentException(
+                throw new AppointmentException(
                         "Приём лекарства пересекается "
                                 + "с записью к врачу");
             }
@@ -98,7 +99,7 @@ public class Patient implements Person {
     public void addAppointment(Appointment appointment) {
 
         if (appointment == null) {
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Запись на приём не задана");
         }
 

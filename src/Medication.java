@@ -1,3 +1,4 @@
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class Medication {
                 || doseDuration.isZero()
                 || doseDuration.isNegative()) {
 
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Некорректное назначение лекарства");
         }
 
@@ -54,7 +55,7 @@ public class Medication {
     public boolean conflictsWith(Appointment appointment) {
 
         if (appointment == null) {
-            throw new IllegalArgumentException(
+            throw new AppointmentException(
                     "Запись на приём не может быть null");
         }
 

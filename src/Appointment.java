@@ -13,15 +13,15 @@ public class Appointment {
                        LocalDate date, LocalTime start,
                        LocalTime end) {
 
-        if (patient == null
-                || doctor == null
-                || date == null
-                || start == null
-                || end == null
-                || !start.isBefore(end)) {
+        if (patient == null || doctor == null || date == null
+                || start == null || end == null) {
+            throw new AppointmentException(
+                    "Данные записи не должны быть пустыми");
+        }
 
-            throw new IllegalArgumentException(
-                    "Некорректные данные записи");
+        if (!end.isAfter(start)) {
+            throw new AppointmentException(
+                    "Время окончания должно быть позже времени начала");
         }
 
         this.patient = patient;
@@ -52,13 +52,16 @@ public class Appointment {
     }
 
     public boolean overlaps(Appointment other) {
-
         if (other == null) {
+            throw new AppointmentException(
+                    "Запись для сравнения не должна быть null");
+        }
+
+        if (!date.equals(other.date)) {
             return false;
         }
 
-        return date.equals(other.date)
-                && start.isBefore(other.end)
+        return start.isBefore(other.end)
                 && other.start.isBefore(end);
     }
 
@@ -76,8 +79,12 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return date + " " + start + "-" + end
-                + ", пациент: " + patient.getFullName()
-                + ", врач: " + doctor.getFullName();
+        return "Appointment{" +
+                "patient=" + patient.getFullName() +
+                ", doctor=" + doctor.getFullName() +
+                ", date=" + date +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
     }
 }

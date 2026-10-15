@@ -1,4 +1,3 @@
-
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -96,5 +95,45 @@ class AppointmentTest {
         );
 
         assertFalse(first.overlaps(second));
+    }
+
+    @Test
+    void shouldThrowAppointmentExceptionForInvalidDoctor() {
+        assertThrows(
+                AppointmentException.class,
+                () -> new Doctor(
+                        "Иван", "Иванов", 45,
+                        "Терапевт", 101,
+                        LocalTime.of(18, 0),
+                        LocalTime.of(9, 0),
+                        Duration.ofMinutes(30)
+                )
+        );
+    }
+
+    @Test
+    void shouldThrowAppointmentExceptionForInvalidPatient() {
+        assertThrows(
+                AppointmentException.class,
+                () -> new Patient(
+                        "", "Петров", 25,
+                        123456, "Грипп", "Иван Иванов"
+                )
+        );
+    }
+
+    @Test
+    void shouldThrowAppointmentExceptionForInvalidMedication() {
+        assertThrows(
+                AppointmentException.class,
+                () -> new Medication(
+                        "",
+                        date,
+                        date.plusDays(3),
+                        LocalTime.of(10, 0),
+                        Duration.ofHours(8),
+                        Duration.ofMinutes(10)
+                )
+        );
     }
 }

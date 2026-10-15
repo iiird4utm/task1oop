@@ -1,4 +1,3 @@
-
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -71,7 +70,7 @@ class MedicationTest {
 
     @Test
     void shouldRejectZeroPeriodicity() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(AppointmentException.class, () ->
                 new Medication(
                         "Лекарство",
                         date,
@@ -85,7 +84,7 @@ class MedicationTest {
 
     @Test
     void shouldRejectZeroDoseDuration() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(AppointmentException.class, () ->
                 new Medication(
                         "Лекарство",
                         date,
